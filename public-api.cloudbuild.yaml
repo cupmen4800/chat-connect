@@ -26,3 +26,4 @@ images:
 - 'us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-private-api:${_COMMIT_SHA}'
 options:
   logging: 'CLOUD_LOGGING_ONLY'
+  serviceAccount: '${_SERVICE_ACCOUNT}'
