@@ -12,5 +12,3 @@ serve({
   fetch: app.fetch,
   port,
 });
-
-console.log(`Server listening on port ${port}`);
