@@ -25,6 +25,6 @@ steps:
   - 'us-central1'
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-web:${_COMMIT_SHA}'
+serviceAccount: '/projects/$PROJECT_ID/serviceAccounts/${_SERVICE_ACCOUNT}'
 options:
   logging: 'CLOUD_LOGGING_ONLY'
-  serviceAccount: '${_SERVICE_ACCOUNT}'

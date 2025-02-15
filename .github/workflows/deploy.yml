@@ -43,6 +43,6 @@ jobs:
             echo "no such file"
             continue
           fi
-          gcloud builds submit --config=${config} --substitutions=_COMMIT_SHA=${{ github.sha }},_SERVICE_ACCOUNT=/projects/chat-connect-production/serviceAccounts/${{ secrets.GCP_SERVICE_ACCOUNT }} .
+          gcloud builds submit --config=${config} --substitutions=_COMMIT_SHA=${{ github.sha }},_SERVICE_ACCOUNT=${{ secrets.GCP_SERVICE_ACCOUNT }} .
           echo ${line}
           done < ./diff.txt
