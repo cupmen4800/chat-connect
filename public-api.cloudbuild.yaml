@@ -1,0 +1,28 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '.'
+  - '-f'
+  - './apps/private-api/Dockerfile'
+  - '-t'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-private-api:${_COMMIT_SHA}'
+  automapSubstitutions: true
+  secretEnv: ['DATABASE_URL']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-private-api:${_COMMIT_SHA}']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+  - 'run'
+  - 'deploy'
+  - 'chat-connect-private-api'
+  - '--image'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-private-api:${_COMMIT_SHA}'
+  - '--region'
+  - 'us-central1'
+images:
+- 'us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-private-api:${_COMMIT_SHA}'
+options:
+  logging: 'CLOUD_LOGGING_ONLY'

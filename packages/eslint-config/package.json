@@ -1,0 +1,9 @@
+{
+  "name": "@repo/eslint-config",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "eslint-config-next": "15.1.6"
+  }
+}

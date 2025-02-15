@@ -1,0 +1,12 @@
+{
+	"extends": "@repo/typescript-config/react-library.json",
+	"compilerOptions": {
+    "baseUrl": ".",
+		"module": "es2022",
+		"moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+	}
+}
