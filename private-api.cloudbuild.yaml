@@ -42,6 +42,8 @@ steps:
   - '--region'
   - 'us-central1'
   - '--update-secrets=DATABASE_URL=DATABASE_URL:latest'
+  - ' --service-account'
+  - '${_SERVICE_ACCOUNT}'
   secretEnv: ['DATABASE_URL']
 images:
 - 'us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-private-api:${_COMMIT_SHA}'

@@ -23,6 +23,8 @@ steps:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-web:${_COMMIT_SHA}'
   - '--region'
   - 'us-central1'
+  - ' --service-account'
+  - '${_SERVICE_ACCOUNT}'
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-web:${_COMMIT_SHA}'
 serviceAccount: 'projects/$PROJECT_ID/serviceAccounts/${_SERVICE_ACCOUNT}'
