@@ -1,0 +1,54 @@
+name: Private API Deploy
+on: 
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: 'Google auth'
+        id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: 'chat-connect-production'
+          workload_identity_provider: '${{ secrets.GCP_WIF_PROVIDER }}'
+          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: setup nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          node-version-file: package.json
+          cache: pnpm
+
+      - name: migrate db
+        run: |-
+          apt-get update
+          apt-get install -y openssl
+          pnpm install --frozen-lockfile
+          DATABASE_URL=$(gcloud secrets versions access 1 --secret=DATABASE_URL) pnpx prisma migrate deploy --schema=./apps/private-api/src/prisma/schema.prisma
+
+      - name: 'Docker auth'
+        run: |-
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: 'Build and push container'
+        run: |-
+          docker build -t "us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-private-api:${{ github.sha }}" .
+          docker push "us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-private-api:${{ github.sha }}"
+
+      - name: 'Deploy to Cloud Run'
+        run: |-
+          gcloud run deploy chat-connect-private-api --image us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-private-api:${{ github.sha }} --region us-central1 --update-secrets=DATABASE_URL=DATABASE_URL:1
