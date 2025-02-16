@@ -12,11 +12,20 @@ jobs:
       contents: read
 
     steps:
+      - name: Check for file changes
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          token: ${{ github.token }}
+          filters: ./.github/filters.yml
+
       # Repository check
       - name: Checkout
+        if: steps.changes.outputs.src == 'true'
         uses: actions/checkout@v4
 
       - name: 'Google auth'
+        if: steps.changes.outputs.src == 'true'
         id: 'auth'
         uses: 'google-github-actions/auth@v2'
         with:
@@ -25,17 +34,21 @@ jobs:
           service_account: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
 
       - name: 'Set up Cloud SDK'
+        if: steps.changes.outputs.src == 'true'
         uses: 'google-github-actions/setup-gcloud@v2'
 
       - name: 'Docker auth'
+        if: steps.changes.outputs.src == 'true'
         run: |-
           gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: 'Build and push container'
+        if: steps.changes.outputs.src == 'true'
         run: |-
           docker build -t "us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-public-api:${{ github.sha }}" . -f ./apps/public-api/Dockerfile
           docker push "us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-public-api:${{ github.sha }}"
 
       - name: 'Deploy to Cloud Run'
+        if: steps.changes.outputs.src == 'true'
         run: |-
           gcloud run deploy chat-connect-public-api --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-public-api:${{ github.sha }} --region us-central1
