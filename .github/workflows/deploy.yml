@@ -21,10 +21,13 @@ jobs:
           token: ${{ github.token }}
           filters: |
             web:
+              - 'apps/web'
               - 'apps/web/**'
             private_api:
+              - 'apps/private-api'
               - 'apps/private-api/**'
             public_api:
+              - 'apps/public-api'
               - 'apps/public-api/**'
   web-deploy:
     needs: changes
