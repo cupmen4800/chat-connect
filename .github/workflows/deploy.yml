@@ -114,7 +114,7 @@ jobs:
 
       - name: 'Deploy to Cloud Run'
         run: |-
-          gcloud run deploy chat-connect-private-api --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-private-api:${{ github.sha }} --region us-central1 --update-secrets=DATABASE_URL=DATABASE_URL:1
+          gcloud run deploy chat-connect-private-api --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-private-api:${{ github.sha }} --region us-central1 --update-secrets=DATABASE_URL=DATABASE_URL:1 --port=3002
   public-api-deploy:
     needs: changes
     if: ${{ needs.changes.outputs.public_api == 'true' }}
@@ -149,4 +149,4 @@ jobs:
 
       - name: 'Deploy to Cloud Run'
         run: |-
-          gcloud run deploy chat-connect-public-api --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-public-api:${{ github.sha }} --region us-central1
+          gcloud run deploy chat-connect-public-api --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-public-api:${{ github.sha }} --region us-central1 --port=3003
