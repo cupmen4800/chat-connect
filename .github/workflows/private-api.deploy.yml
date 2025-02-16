@@ -17,7 +17,7 @@ jobs:
         id: changes
         with:
           token: ${{ github.token }}
-          filters: ./.github/filters.yml
+          filters: .github/filters.yml
 
       - name: Checkout
         if: steps.changes.outputs.src == 'true'
