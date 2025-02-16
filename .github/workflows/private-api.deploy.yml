@@ -40,8 +40,8 @@ jobs:
 
       - name: migrate db
         run: |-
-          apt-get update
-          apt-get install -y openssl
+          sudo apt-get update
+          sudo apt-get install -y openssl
           pnpm install --frozen-lockfile
           DATABASE_URL=$(gcloud secrets versions access 1 --secret=DATABASE_URL) pnpx prisma migrate deploy --schema=./apps/private-api/src/prisma/schema.prisma
 
@@ -56,4 +56,4 @@ jobs:
 
       - name: 'Deploy to Cloud Run'
         run: |-
-          gcloud run deploy chat-connect-private-api --image us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-private-api:${{ github.sha }} --region us-central1 --update-secrets=DATABASE_URL=DATABASE_URL:1
+          gcloud run deploy chat-connect-private-api --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-private-api:${{ github.sha }} --region us-central1 --update-secrets=DATABASE_URL=DATABASE_URL:1

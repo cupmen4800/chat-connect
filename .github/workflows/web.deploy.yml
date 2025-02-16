@@ -37,4 +37,4 @@ jobs:
 
       - name: 'Deploy to Cloud Run'
         run: |-
-          gcloud run deploy chat-connect-web --image us-central1-docker.pkg.dev/$PROJECT_ID/chat-connect/chat-connect-web:${{ github.sha }} --region us-central1
+          gcloud run deploy chat-connect-web --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-web:${{ github.sha }} --region us-central1
