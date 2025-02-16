@@ -33,7 +33,7 @@ jobs:
 
       - name: 'Build and push container'
         run: |-
-          docker build -t "us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-public-api:${{ github.sha }}" .
+          docker build -t "us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-public-api:${{ github.sha }}" . -f ./apps/public-api/Dockerfile
           docker push "us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/chat-connect/chat-connect-public-api:${{ github.sha }}"
 
       - name: 'Deploy to Cloud Run'
