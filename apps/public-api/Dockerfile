@@ -32,7 +32,6 @@ RUN pnpm install --frozen-lockfile
 
 # Build the project
 COPY --from=builder /app/out/full/ .
-RUN cd ./apps/public-api/ && pnpx prisma generate
 RUN pnpx turbo run build --filter=public-api
 
 FROM base AS runner
