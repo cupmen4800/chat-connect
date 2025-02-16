@@ -1,4 +1,4 @@
-name: Web Deploy
+name: Deploy
 on: 
   push:
     branches:
@@ -12,6 +12,8 @@ jobs:
       private_api: ${{ steps.filter.outputs.private_api }}
       public_api: ${{ steps.filter.outputs.public_api }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Check for file changes
         uses: dorny/paths-filter@v3
         id: changes
